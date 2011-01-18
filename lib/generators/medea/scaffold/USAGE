@@ -1,0 +1,35 @@
+Description:
+    Scaffolds an entire resource, from model to controller and
+    views. The resource is ready to use as a starting point for your restful,
+    resource-oriented application. Tests or specs are also generated depending
+    on if you have a "spec" directory or not.
+
+    IMPORTANT: This generator uses the "title" helper method which is generated
+    by the nifty_layout generator. You may want to run that generator first.
+
+Usage:
+    Pass the name of the model, either CamelCased or under_scored, as the first
+    argument along with an optional list of attribute pairs and controller actions.
+
+    If no controller actions are specified, they will default to index, show,
+    new, create, edit, update, and destroy.
+
+    For example, `medea:scaffold post` gives you a model, a controller that handles
+    the create/show/update/destroy, forms to create and edit your posts, and
+    an index that lists them all, as well as a map.resources :posts
+    declaration in config/routes.rb.
+
+    Adding an "!" in the mix of arguments will invert the passed controller
+    actions. This will include all 7 controller actitons except the ones
+    mentioned. This option doesn't affect model attributes.
+
+Examples:
+    rails generate medea:scaffold post
+
+        Will create a controller called "posts" it will contain all seven
+        CRUD actions along with the views. A model will also be created.
+
+    rails generate medea:scaffold post ! show new
+
+        Creates a posts model and controller with index, edit, update, and
+        destroy actions.
