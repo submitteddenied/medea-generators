@@ -1,4 +1,4 @@
-  it "update action should render edit template when model is invalid" do
+  it "update action should render edit templates when model is invalid" do
     <%= class_name %>.any_instance.stubs(:valid?).returns(false)
     put :update, :id => <%= class_name %>.first
     response.should render_template(:edit)

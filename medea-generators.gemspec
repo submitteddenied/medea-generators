@@ -1,10 +1,9 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "medea-generators/version"
 
 Gem::Specification.new do |s|
   s.name        = "medea-generators"
-  s.version     = "0.0.1"
+  s.version     = "0.1.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Michael Jensen"]
   s.email       = ["michaelj@jasondb.com"]
@@ -14,6 +13,7 @@ Gem::Specification.new do |s|
 This is very closely modelled on Ryan Bates' Nifty Generators.}
 
   s.add_development_dependency 'rails', '~> 3.0.0'
+  s.add_dependency 'medea'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

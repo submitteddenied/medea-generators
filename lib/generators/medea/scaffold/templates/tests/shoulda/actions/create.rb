@@ -1,5 +1,5 @@
   context "create action" do
-    should "render new template when model is invalid" do
+    should "render new templates when model is invalid" do
       <%= class_name %>.any_instance.stubs(:valid?).returns(false)
       post :create
       assert_template 'new'

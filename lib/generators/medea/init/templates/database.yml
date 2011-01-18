@@ -1,0 +1,14 @@
+development:
+  jason_topic: <%= @topic %>-dev
+  jason_user: <%= @user %>
+  jason_password: <%= @pass %>
+
+test:
+  jason_topic: <%= @topic %>-test
+  jason_user: <%= @user %>
+  jason_password: <%= @pass %>
+
+production:
+  jason_topic: <%= @topic %>
+  jason_user: <%= @user %>
+  jason_password: <%= @pass %>

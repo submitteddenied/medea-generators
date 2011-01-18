@@ -1,4 +1,4 @@
-  it "create action should render new template when model is invalid" do
+  it "create action should render new templates when model is invalid" do
     <%= class_name %>.any_instance.stubs(:valid?).returns(false)
     post :create
     response.should render_template(:new)
