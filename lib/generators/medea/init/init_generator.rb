@@ -29,13 +29,8 @@ module Medea
       def init_jasondb
         #we can't create the topic, but we can create database.yml
         template "database.yml", "config/database.yml"
+        template "jasondb.rb", "config/initializers/jasondb.rb"
 
-#        #we will also deploy templates at this point.
-#        jason_base = "http://#{@user}:#{@pass}@rest.jason.com/"
-#        topics = [@topic, "#{@topic}-dev", "#{@topic}-test"]
-#        for t in topics
-#          Medea::setup_templates "#{jason_base}#{t}/"
-#        end
       end
     end
   end
