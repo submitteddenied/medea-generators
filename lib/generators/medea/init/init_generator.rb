@@ -14,20 +14,20 @@ module Medea
           rand(32**length).to_s(32)
         end
 
-        def create_topic
+        def create_topic topic
           payload = {
               "..USERNAME" => @user,
               "..PASSWORD" => @pass,
               "..CONFIRM_PASSWORD" => @pass,
               "..PERMISSIONS" => "S",
               "..CHECKSUM" => "FALSE",
-              "..DOMAIN" => %({"domain":"http://rest.jasondb.com/#{@topic}"}),
+              "..DOMAIN" => %({"domain":"http://rest.jasondb.com/#{topic}"}),
               "..STATE" => "0 EQ 0 THEN ..NEW THEN ..NEW",
-              "..A_new_domain" => "Your new domain #{@topic} has been created"
+              "..A_new_domain" => "Your new domain #{topic} has been created"
           }
           success = true
           begin
-            resp = RestClient.post "https://rest.jasondb.com/#{@topic}", payload
+            resp = RestClient.post "https://rest.jasondb.com/#{topic}", payload
             if resp.code == 201
               #success!
             else
