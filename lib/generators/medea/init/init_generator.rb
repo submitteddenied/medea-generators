@@ -7,10 +7,32 @@ require 'rest_client'
 module Medea
   module Generators
     class InitGenerator < Base
-      no_tasks {
-        attr_accessor :topic, :user, :pass
+      no_tasks { attr_accessor :topic, :user, :pass }
+      argument :jason_topic, :type => :string, :required => false, :banner => "Topic"
+      argument :username, :type => :string, :required => false, :banner => "username"
+      argument :password, :type => :string, :required => false, :banner => "password"
 
-        def random_string length = 25
+      def initialize(*args, &block)
+        super
+
+        @topic = jason_topic
+        @topic ||= random_string 10
+        @user = username
+        @user ||= random_string
+        @pass = password
+        @pass ||= random_string
+      end
+
+      def init
+        #we can't create the topic, but we can create database.yml
+        template "database.yml", "config/database.yml"
+        template "jasondb.rb", "config/initializers/jasondb.rb"
+        create_topics
+      end
+
+      protected
+      
+      def random_string length = 25
           rand(32**length).to_s(32)
         end
 
@@ -50,28 +72,6 @@ module Medea
           create_topic "#{@topic}-test"
           create_topic @topic
         end
-      }
-      argument :jason_topic, :type => :string, :required => false, :banner => "Topic"
-      argument :username, :type => :string, :required => false, :banner => "username"
-      argument :password, :type => :string, :required => false, :banner => "password"
-
-      def initialize(*args, &block)
-        super
-
-        @topic = jason_topic
-        @topic ||= random_string 10
-        @user = username
-        @user ||= random_string
-        @pass = password
-        @pass ||= random_string
-      end
-
-      def init
-        #we can't create the topic, but we can create database.yml
-        template "database.yml", "config/database.yml"
-        template "jasondb.rb", "config/initializers/jasondb.rb"
-        create_topics
-      end
     end
   end
 end
