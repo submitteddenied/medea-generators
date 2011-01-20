@@ -12,8 +12,9 @@ Gem::Specification.new do |s|
   s.description = %q{Medea Generators provides scaffolding for Rails projects using Medea to access JasonDB.
 This is very closely modelled on Ryan Bates' Nifty Generators.}
 
-  s.add_development_dependency 'rails', '~> 3.0.0'
+  s.add_development_dependency 'rails', '~> 3.0.3'
   s.add_dependency 'medea'
+  s.add_dependency 'rest-client'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
