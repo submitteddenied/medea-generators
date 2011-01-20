@@ -44,6 +44,12 @@ module Medea
           end
 
         end
+
+        def create_topics
+          create_topic "#{@topic}-dev"
+          create_topic "#{@topic}-test"
+          create_topic @topic
+        end
       }
       argument :jason_topic, :type => :string, :required => false, :banner => "Topic"
       argument :username, :type => :string, :required => false, :banner => "username"
@@ -60,11 +66,11 @@ module Medea
         @pass ||= random_string
       end
 
-      def init_jasondb
+      def init
         #we can't create the topic, but we can create database.yml
         template "database.yml", "config/database.yml"
         template "jasondb.rb", "config/initializers/jasondb.rb"
-        create_topic
+        create_topics
       end
     end
   end
