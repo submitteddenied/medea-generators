@@ -12,11 +12,18 @@ module Medea
       argument :username, :type => :string, :required => false, :banner => "username"
       argument :password, :type => :string, :required => false, :banner => "password"
 
+      class_option :skip_topics, :desc => 'Don\'t automatically create topics.', :type => :boolean
+
       def initialize(*args, &block)
         super
 
         @topic = jason_topic
-        @topic ||= random_string 10
+        if not @topic
+          @topic ||= random_string 10
+          if @topic[0] =~ /[0-9]/
+            @topic[0] = "abcdefghij"[@topic[0].to_i]
+          end
+        end
         @user = username
         @user ||= random_string
         @pass = password
@@ -32,7 +39,7 @@ module Medea
 
       protected
       
-      def random_string length = 25
+        def random_string length = 25
           rand(32**length).to_s(32)
         end
 
@@ -62,15 +69,21 @@ module Medea
           if success
             say_status "create", "Topic created."
           else
-            say_status "Warning", "An error occurred while creating the Topic. Does it already exist?", :yellow
+            if topic[0] =~ /[0-9]/
+              say_status "Error", "An error occurred while creating the Topic. It must start with a letter", :red
+            else
+              say_status "Warning", "An error occurred while creating the Topic. Does it already exist?", :yellow
+            end
           end
 
         end
 
         def create_topics
-          create_topic "#{@topic}-dev"
-          create_topic "#{@topic}-test"
-          create_topic @topic
+          unless options.skip_topics?
+            create_topic "#{@topic}-dev"
+            create_topic "#{@topic}-test"
+            create_topic @topic
+          end
         end
     end
   end
