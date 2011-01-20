@@ -12,14 +12,15 @@ module Medea
           rand(32**length).to_s(32)
         end
       }
-      argument :jason_topic, :type => :string, :required => true, :banner => "Topic"
+      argument :jason_topic, :type => :string, :required => false, :banner => "Topic"
       argument :username, :type => :string, :required => false, :banner => "username"
-      argument :password, :type => :string, :required => false, :banner => "s3cretp@ssword"
+      argument :password, :type => :string, :required => false, :banner => "password"
 
       def initialize(*args, &block)
         super
 
         @topic = jason_topic
+        @topic ||= random_string 10
         @user = username
         @user ||= random_string
         @pass = password
