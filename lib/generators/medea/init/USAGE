@@ -1,0 +1,23 @@
+Description:
+    Initialises the settings required to use JasonDB from your Rails application.
+    Also patches config/application.rb to remove the dependency on active record.
+    Topics created are:
+      <base>-dev    # Used in the rails development environment
+      <base>-test   # Used in the rails test environment
+      <base>        # Used in the rails production environment
+
+Usage:
+    Pass the name of your desired topic (JasonDB namespace), and a username and password.
+    Note that all three of these fields are optional and can be randomly generated for you.
+
+Examples:
+    rails generate medea:init
+
+        Will initialise database.yml, add the JasonDB initialiser, patch application.rb,
+        generate a topic base, username and password and create the topic(s) on JasonDB.
+
+    rails generate medea:init myapp user_name p@$$w0rD
+
+        Will do the same as above, but will use 'myapp' as the topic base, 'user_name' as the
+        user name and 'p@$$w0rD' as the password in database.yml and when creating the topics
+        on JasonDB.

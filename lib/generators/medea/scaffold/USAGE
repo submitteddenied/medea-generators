@@ -4,9 +4,6 @@ Description:
     resource-oriented application. Tests or specs are also generated depending
     on if you have a "spec" directory or not.
 
-    IMPORTANT: This generator uses the "title" helper method which is generated
-    by the nifty_layout generator. You may want to run that generator first.
-
 Usage:
     Pass the name of the model, either CamelCased or under_scored, as the first
     argument along with an optional list of attribute pairs and controller actions.
