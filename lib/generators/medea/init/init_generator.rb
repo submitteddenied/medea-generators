@@ -64,9 +64,9 @@ require 'rails/test_unit/railtie'
           end
 
           application_rb.close
-          say_status "patched", "config/application.rb", :green
+          say_status "patch", "config/application.rb", :green
         else
-          say_status "checked", "config/application.rb", :blue
+          say_status "check", "config/application.rb", :blue
         end
       end
 
@@ -100,12 +100,12 @@ require 'rails/test_unit/railtie'
           end
 
           if success
-            say_status "create", "Topic created."
+            say_status "create", "JasonDB Topic: #{topic}"
           else
             if topic[0] =~ /[0-9]/
-              say_status "Error", "An error occurred while creating the Topic. It must start with a letter", :red
+              say_status "error", "An error occurred while creating the Topic. It must start with a letter", :red
             else
-              say_status "Warning", "An error occurred while creating the Topic. Does it already exist?", :yellow
+              say_status "warning", "An error occurred while creating the Topic. Does it already exist?", :yellow
             end
           end
 
