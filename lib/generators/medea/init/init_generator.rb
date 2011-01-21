@@ -37,6 +37,39 @@ module Medea
         create_topics
       end
 
+      def patch_application
+        new_requires = <<-END
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'active_resource/railtie'
+require 'rails/test_unit/railtie'
+        END
+
+        #open up application.rb
+        application_rb = File.new("#{Rails.root}/config/application.rb")
+        lines = application_rb.readlines
+        application_rb.close
+
+        changes = false
+        #find the line that reads require 'rails/all'
+        lines.each do |line|
+          #replace that line with the new four
+          changes = true if line.gsub!(/require 'rails\/all'/, new_requires)
+        end
+
+        if changes
+          application_rb = File.new("#{Rails.root}/config/application.rb", "w")
+          lines.each do |line|
+            application_rb.write line
+          end
+
+          application_rb.close
+          say_status "patched", "config/application.rb", :green
+        else
+          say_status "checked", "config/application.rb", :blue
+        end
+      end
+
       protected
       
         def random_string length = 25
