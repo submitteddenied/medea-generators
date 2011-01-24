@@ -78,10 +78,10 @@ module Medea
         template 'model.rb.erb', "app/models/#{model_path}.rb"
         if test_framework == :rspec
           template "tests/rspec/model.rb", "spec/models/#{model_path}_spec.rb"
-          template 'fixtures.yml', "spec/fixtures/#{model_path.pluralize}.yml"
+          #template 'fixtures.yml', "spec/fixtures/#{model_path.pluralize}.yml"
         else
           template "tests/#{test_framework}/model.rb", "test/unit/#{model_path}_test.rb"
-          template 'fixtures.yml', "test/fixtures/#{model_path.pluralize}.yml"
+          #template 'fixtures.yml', "test/fixtures/#{model_path.pluralize}.yml"
         end
       end
 
