@@ -9,5 +9,5 @@ class <%= class_name %> < Medea::JasonObject
       end
     end
   %>
-  <%= result.join("\n") if result.count > 0 %>
+  <%= result.join("\n  ") if result.count > 0 %>
 end
