@@ -25,16 +25,24 @@ module Medea
         print_usage unless scaffold_name.underscore =~ /^[a-z][a-z0-9_\/]+$/
 
         @controller_actions = []
-        @model_attributes = []
+        @model_attributes = {}
         @skip_model = options.skip_model?
         @namespace_model = options.namespace_model?
         @invert_actions = options.invert?
 
+        list_types = %w(has owns)
         args_for_c_m.each do |arg|
           if arg == '!'
             @invert_actions = true
           elsif arg.include?(':')
-            @model_attributes << Rails::Generators::GeneratedAttribute.new(*arg.split(':'))
+            list = arg.split(':')
+            #ignore impossible list types
+            unless list_types.include? list[0]
+              say_status "warn", %(Ignoring relationship "#{list[0]}", not known to Medea), :yellow
+              next
+            end
+            @model_attributes[list[0]] ||= []
+            @model_attributes[list[0]] << list[1..2]
           else
             @controller_actions << arg
             @controller_actions << 'create' if arg == 'new'
@@ -49,15 +57,16 @@ module Medea
           @controller_actions = all_actions - @controller_actions
         end
 
-        if @model_attributes.empty?
-          if model_exists?
-            model_columns_for_attributes.each do |column|
-              @model_attributes << Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
-            end
-          else
-            @model_attributes << Rails::Generators::GeneratedAttribute.new('name', 'string')
-          end
-        end
+        #we don't do anything differently if there are no attributes passed.
+  #        if @model_attributes.empty?
+  #          if model_exists?
+  #            model_columns_for_attributes.each do |column|
+  #              @model_attributes << Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
+  #            end
+  #          else
+  #            @model_attributes << Rails::Generators::GeneratedAttribute.new('name', 'string')
+  #          end
+  #        end
       end
 
       def add_gems
@@ -66,7 +75,7 @@ module Medea
       end
 
       def create_model
-        template 'model.rb', "app/models/#{model_path}.rb"
+        template 'model.rb.erb', "app/models/#{model_path}.rb"
         if test_framework == :rspec
           template "tests/rspec/model.rb", "spec/models/#{model_path}_spec.rb"
           template 'fixtures.yml', "spec/fixtures/#{model_path.pluralize}.yml"
@@ -252,6 +261,11 @@ module Medea
             items_url
           end
         end
+      end
+
+      def model_list_properties
+        class_name.constantize
+
       end
 
       def model_columns_for_attributes

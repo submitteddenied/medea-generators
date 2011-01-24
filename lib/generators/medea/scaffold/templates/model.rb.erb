@@ -1,0 +1,11 @@
+class <%= class_name %> < Medea::JasonObject
+  <%
+    %(has owns).each do |l|
+      if model_attributes[l]
+        model_attributes[l].each do |a| %>
+          <%= "#{l}_many :#{a[0]}, #{a[1]}" %>
+  <%    end
+      end
+    end
+  %>
+end
