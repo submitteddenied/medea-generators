@@ -4,7 +4,7 @@ require 'rails/generators/generated_attribute'
 module Medea
   module Generators
     class ScaffoldGenerator < Base
-      no_tasks { attr_accessor :scaffold_name, :model_attributes, :controller_actions }
+      no_tasks { attr_accessor :scaffold_name, :model_attributes, :controller_actions, :list_properties }
 
       argument :scaffold_name, :type => :string, :required => true, :banner => 'ModelName'
       argument :args_for_c_m, :type => :array, :default => [], :banner => 'controller_actions and model:attributes'
@@ -25,7 +25,8 @@ module Medea
         print_usage unless scaffold_name.underscore =~ /^[a-z][a-z0-9_\/]+$/
 
         @controller_actions = []
-        @model_attributes = {}
+        @model_attributes = []
+        @list_properties = {}
         @skip_model = options.skip_model?
         @namespace_model = options.namespace_model?
         @invert_actions = options.invert?
@@ -36,13 +37,14 @@ module Medea
             @invert_actions = true
           elsif arg.include?(':')
             list = arg.split(':')
-            #ignore impossible list types
-            unless list_types.include? list[0]
-              say_status "warn", %(Ignoring relationship "#{list[0]}", not known to Medea), :yellow
-              next
+            #if the argument is a "has" or a "owns", we treat it as a list property.
+            #Otherwise, it's a regular model attribute
+            if list_types.include? list[0]
+              @list_properties[list[0]] ||= []
+              @list_properties[list[0]] << list[1..2]
+            else
+              @model_attributes << Rails::Generators::GeneratedAttribute.new(*arg.split(':'))
             end
-            @model_attributes[list[0]] ||= []
-            @model_attributes[list[0]] << list[1..2]
           else
             @controller_actions << arg
             @controller_actions << 'create' if arg == 'new'
@@ -51,22 +53,22 @@ module Medea
         end
 
         @controller_actions.uniq!
-        #@model_attributes.uniq!
+        @model_attributes.uniq!
 
         if @invert_actions || @controller_actions.empty?
           @controller_actions = all_actions - @controller_actions
         end
 
         #we don't do anything differently if there are no attributes passed.
-  #        if @model_attributes.empty?
-  #          if model_exists?
-  #            model_columns_for_attributes.each do |column|
-  #              @model_attributes << Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
-  #            end
-  #          else
-  #            @model_attributes << Rails::Generators::GeneratedAttribute.new('name', 'string')
-  #          end
-  #        end
+        if @model_attributes.empty?
+          if model_exists?
+            model_columns_for_attributes.each do |column|
+              @model_attributes << Rails::Generators::GeneratedAttribute.new(column.name.to_s, column.type.to_s)
+            end
+          else
+            @model_attributes << Rails::Generators::GeneratedAttribute.new('name', 'string')
+          end
+        end
       end
 
       def add_gems
@@ -78,10 +80,10 @@ module Medea
         template 'model.rb.erb', "app/models/#{model_path}.rb"
         if test_framework == :rspec
           template "tests/rspec/model.rb", "spec/models/#{model_path}_spec.rb"
-          #template 'fixtures.yml', "spec/fixtures/#{model_path.pluralize}.yml"
+          template 'fixtures.yml', "spec/fixtures/#{model_path.pluralize}.yml"
         else
           template "tests/#{test_framework}/model.rb", "test/unit/#{model_path}_test.rb"
-          #template 'fixtures.yml', "test/fixtures/#{model_path.pluralize}.yml"
+          template 'fixtures.yml', "test/fixtures/#{model_path.pluralize}.yml"
         end
       end
 
