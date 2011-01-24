@@ -271,9 +271,7 @@ module Medea
       end
 
       def model_columns_for_attributes
-        class_name.constantize.columns.reject do |column|
-          column.name.to_s =~ /^(id|created_at|updated_at)$/
-        end
+        []
       end
 
       def view_language
