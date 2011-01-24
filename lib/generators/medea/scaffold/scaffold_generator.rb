@@ -51,7 +51,7 @@ module Medea
         end
 
         @controller_actions.uniq!
-        @model_attributes.uniq!
+        #@model_attributes.uniq!
 
         if @invert_actions || @controller_actions.empty?
           @controller_actions = all_actions - @controller_actions
