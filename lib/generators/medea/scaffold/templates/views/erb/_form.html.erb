@@ -1,11 +1,11 @@
 <%%= form_for <%= item_path :instance_variable => true %> do |f| %>
   <%% if f.errors.any? %>
     <div id="error_explanation">
-      <h2><%%= pluralize(f.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h2><%%= pluralize(f.errors.count, "error") %> prohibited this <%= singular_name %> from being saved:</h2>
 
       <ul>
       <%% f.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+        <li><%%= msg %></li>
       <%% end %>
       </ul>
     </div>
